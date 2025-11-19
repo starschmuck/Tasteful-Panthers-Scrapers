@@ -30,27 +30,27 @@ def seed_reviews_today():
     print(f"Found {len(user_info)} users and {len(meals)} meals for {date_key}")
 
     for uid, username in user_info:
-        for meal_id, meal in meals:
-            meal_name = meal.get("name", "Unknown Meal")
+        sampled_meals = random.sample(meals, min(10, len(meals)))  # Pick up to 10 meals
 
-            # Deterministic doc ID: userId + mealId
+        for meal_id, meal in sampled_meals:
+            meal_name = meal.get("name", "Unknown Meal")
             review_id = f"{uid}_{meal_id}"
 
             review_data = {
                 "userId": uid,
-                "meal": meal_name,  # matches Flutter's submitReview
+                "meal": meal_name,
                 "rating": round(random.uniform(1.0, 5.0), 1),
                 "tags": [],
                 "reviewText": f"Test review gibberish {random.randint(1000,9999)}",
                 "mediaUrl": None,
                 "timestamp": firestore.SERVER_TIMESTAMP,
-                "test": True,  # ✅ tag for easy cleanup
+                "test": True,
             }
 
-            # Use set() so re-runs overwrite instead of duplicating
             db.collection("reviews").document(review_id).set(review_data)
 
-        print(f"✅ Seeded/updated {len(meals)} reviews for user {username} ({uid})")
+        print(f"✅ Seeded {len(sampled_meals)} reviews for user {username} ({uid})")
+
 
 if __name__ == "__main__":
     seed_reviews_today()
