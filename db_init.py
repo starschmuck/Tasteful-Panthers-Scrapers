@@ -146,7 +146,7 @@ def parse_day(date):
         # Loop through each category in the meal
         for bul in g_bullets:
             category = bul.select('div[class^="group_titles"]')
-            category = category[0].select('div[class^="group_title"]')[0]
+            #category = category[0].select('div[class^="group_title"]')[0]
 
             category_items = bul.find('ul', class_=False).find_all('li')
 
